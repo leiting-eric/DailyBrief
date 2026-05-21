@@ -111,6 +111,8 @@ async function callOnce(userPayloadJson: string): Promise<DailyReport> {
   const userPrompt =
     REPORT_LOCALE === "en"
       ? [
+          "**Output language: ENGLISH ONLY.** Every string value in the JSON — hero_headline, daily_overview, every brief's title/summary, editor_note, keywords — must be written entirely in English. No Chinese characters anywhere.",
+          "",
           "Your task: generate today's daily brief from the candidate news below. **The response MUST be a single valid JSON object** — starts with `{`, ends with `}`, no markdown, no code fences, no explanations.",
           "",
           "The JSON must contain every field non-empty (briefs arrays per the system-prompt counts):",

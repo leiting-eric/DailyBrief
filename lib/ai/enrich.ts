@@ -178,7 +178,17 @@ async function runEnrichment(
   systemPrompt: string,
   scope: string,
 ): Promise<Map<string, string>> {
+  // Sonnet has a strong "match input language" reflex — when items contain
+  // English titles + Chinese-tinted source names (or just a Chinese-leaning
+  // RLHF default), system-prompt-only language constraints get ignored. Pin
+  // the output language as the first line of the *user* prompt for recency.
+  const langHeader =
+    REPORT_LOCALE === "en"
+      ? "**Output language: ENGLISH ONLY.** Every summary string must be written entirely in English, even if the input title or description contains Chinese."
+      : "**输出语言：仅中文。** 每个 summary 字段必须全部是中文，即使输入条目是英文。";
   const userPrompt = [
+    langHeader,
+    "",
     USER_PROMPT_HEADER(payload.length),
     JSON.stringify(payload),
     "",
