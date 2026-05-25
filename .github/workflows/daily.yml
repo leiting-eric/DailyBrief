@@ -28,14 +28,16 @@ name: Daily Brief
 
 on:
   schedule:
-    # Hourly trigger at minute 7 (off-peak). GitHub Actions silently drops
-    # a non-trivial fraction of scheduled runs whose cron lands at minute
-    # 0 — that's where everyone clusters. Moving to an odd off-peak minute
-    # roughly halves the miss rate. The gate decides which firings actually
-    # build, and the catchup branch in the gate covers the residual misses
-    # by allowing a build later in the day if today's report is still
+    # Two hourly triggers (at :07 and :37) — GitHub Actions silently drops
+    # a non-trivial fraction of scheduled runs, sometimes whole stretches
+    # of 2-3 hours back-to-back. A single off-peak cron was not enough; we
+    # saw the BJ 08-10 stretch get fully swallowed multiple times. Two
+    # triggers per hour gives ~95% per-window coverage, and the gate's
+    # catchup branch handles the residual misses by allowing a build any
+    # time after `earliest REPORT_HOUR - 1` if today's report is still
     # absent from gh-pages.
     - cron: '7 * * * *'
+    - cron: '37 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -134,7 +136,14 @@ jobs:
                 earliest_hour=$h_trim
               fi
             done
-            if [ "$NOW_HOUR" -gt "$earliest_hour" ]; then
+            # Tolerate 1h early: if BJ 07:XX is the only trigger before BJ
+            # 08:00 gets swallowed, we'd rather fire slightly early than
+            # not at all. earliest_hour=0 edge case: don't go negative.
+            catchup_threshold=$earliest_hour
+            if [ "$earliest_hour" -gt 0 ]; then
+              catchup_threshold=$((earliest_hour - 1))
+            fi
+            if [ "$NOW_HOUR" -ge "$catchup_threshold" ]; then
               TODAY=$(TZ="$TZ_VAL" date +%Y-%m-%d)
               CHECK_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/${TODAY}/${TODAY}.html?ref=gh-pages"
               HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
