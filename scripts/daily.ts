@@ -211,17 +211,58 @@ async function runTrading(): Promise<TradingSection | null> {
   };
 }
 
+/** 从 JSON 文件加载旧文章，将 publishedAt 转回 Date 对象 */
+function loadCachedArticles(file: string): ArticleInput[] {
+  const raw = JSON.parse(fs.readFileSync(file, "utf-8"));
+  const list: any[] = raw.articles || [];
+  return list.map((a: any) => ({
+    ...a,
+    publishedAt: a.publishedAt ? new Date(a.publishedAt) : undefined,
+  }));
+}
+
 async function main() {
   // Fail fast on misconfigured backend before we spend 30s fetching
   // 500+ articles only to discover the LLM has no credentials.
   validateBackendCredentials();
 
   const date = todayKey();
+  const dateDir = path.join(OUTPUT_DIR, date);
+  const articlesFile = path.join(dateDir, `${date}-articles.json`);
+
   console.log(`[daily] ${date} — fetching sources…\n`);
   const articles = await fetchAll();
   console.log(`\n[daily] total articles: ${articles.length}`);
   if (articles.length === 0) {
     throw new Error("no articles fetched — aborting");
+  }
+
+  // 如果当天已有旧数据，合并去重（按 URL）
+  if (fs.existsSync(articlesFile)) {
+    try {
+      const existing = loadCachedArticles(articlesFile);
+      if (existing.length > 0) {
+        const seen = new Map(articles.map((a) => [a.url, a]));
+        let added = 0;
+        for (const old of existing) {
+          const existingNew = seen.get(old.url);
+          if (existingNew) {
+            // 同 URL：保留旧文摘要（新取的文章没有 summary）
+            if (old.summary && !existingNew.summary) {
+              existingNew.summary = old.summary;
+            }
+          } else {
+            articles.push(old);
+            seen.set(old.url, old);
+            added++;
+          }
+        }
+        console.log(`[daily] merged ${added} new + ${existing.length - added} duplicate summaries kept → ${articles.length} total`);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.warn(`[daily] failed to load cached articles, continuing fresh: ${msg}`);
+    }
   }
 
   // Enrich GH Trending, finance news, and politics with Chinese summaries.
@@ -247,22 +288,28 @@ async function main() {
   if (trading) report.trading = trading;
   console.log(`[daily] digest ready in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 
-  const dateDir = path.join(OUTPUT_DIR, date);
+  // 写入文件（每日仅一份，无后缀覆盖）
   fs.mkdirSync(dateDir, { recursive: true });
   const base = path.join(dateDir, date);
   const raw = groupRaw(articles, sources);
-  fs.writeFileSync(`${base}.json`, JSON.stringify(report, null, 2), "utf8");
-  // Sidecar with all fetched articles + LLM-attached summary, so
-  // scripts/render.ts can rebuild HTML/MD for UI iteration without
-  // re-fetching or re-calling the LLM.
+
+  // 原子写入：先写 .tmp 后 rename，防止读取到半写文件
+  fs.writeFileSync(`${base}.json.tmp`, JSON.stringify(report, null, 2), "utf8");
+  fs.renameSync(`${base}.json.tmp`, `${base}.json`);
+
   fs.writeFileSync(
-    `${base}-articles.json`,
+    `${base}-articles.json.tmp`,
     JSON.stringify({ date, articles }, null, 2),
     "utf8",
   );
-  fs.writeFileSync(`${base}.html`, renderHtml(report, raw, date), "utf8");
+  fs.renameSync(`${base}-articles.json.tmp`, `${base}-articles.json`);
+
+  fs.writeFileSync(`${base}.html.tmp`, renderHtml(report, raw, date), "utf8");
+  fs.renameSync(`${base}.html.tmp`, `${base}.html`);
+
   if (process.env.OUTPUT_MARKDOWN === "true") {
-    fs.writeFileSync(`${base}.md`, renderMarkdown(report, date), "utf8");
+    fs.writeFileSync(`${base}.md.tmp`, renderMarkdown(report, date), "utf8");
+    fs.renameSync(`${base}.md.tmp`, `${base}.md`);
     console.log(`[daily] wrote ${base}.{json,html,md,articles.json}`);
   } else {
     console.log(`[daily] wrote ${base}.{json,html,articles.json}`);

@@ -249,6 +249,7 @@ node scripts/install.mjs --global
 | `npm run quota-report` | 看各 LLM backend 用量统计 | 即时 |
 | `npm run sources` | 列出所有数据源（按 locale 标注启用/过滤状态）| 即时 |
 | `npm run sources:check` | 仅校验 `sources.config.json` schema（适合 CI / pre-commit）| 即时 |
+| `npm run serve` | 启动 Web 管理后台（仪表盘/配置/数据源编辑/一键运行），默认 http://localhost:3456 | 即时 |
 
 ---
 
@@ -773,6 +774,7 @@ Sleep-wake behavior at next trigger time:
 | `npm run quota-report` | Per-backend LLM usage summary | instant |
 | `npm run sources` | List all sources with locale / enabled status | instant |
 | `npm run sources:check` | Validate `sources.config.json` schema (good for CI / pre-commit) | instant |
+| `npm run serve` | Launch Web dashboard (config, sources, one-click run, logs), default http://localhost:3456 | instant |
 
 ---
 

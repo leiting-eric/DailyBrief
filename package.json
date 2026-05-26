@@ -13,16 +13,19 @@
     "sources:check": "tsx scripts/sources.ts check",
     "deploy": "node scripts/deploy.mjs",
     "build-site": "node scripts/build-site.mjs",
-    "open": "node scripts/open-report.mjs"
+    "open": "node scripts/open-report.mjs",
+    "serve": "tsx server/index.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",
     "cheerio": "^1.2.0",
+    "express": "^5.1.0",
     "jsonrepair": "^3.14.0",
     "openai": "^6.38.0",
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^20",
     "dotenv": "^17.4.2",
     "tsx": "^4.21.0",

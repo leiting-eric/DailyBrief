@@ -10,6 +10,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["lib/**/*.ts", "scripts/**/*.ts", "scripts/**/*.mjs"],
+  "include": ["lib/**/*.ts", "scripts/**/*.ts", "scripts/**/*.mjs", "server/**/*.ts"],
   "exclude": ["node_modules"]
 }
