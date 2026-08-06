@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { LlmIncompleteResponseError } from "../errors";
 import { classifyError, logLlmCall } from "../log";
 import type { LlmRunOptions, LlmRunResult } from "../llm";
 
@@ -83,6 +84,18 @@ export async function runOpenAICompat(
   const timeoutMs = opts.timeoutMs ?? 180_000;
 
   try {
+    // DeepSeek V4 defaults to thinking mode. Digest/enrichment requests are
+    // structured extraction tasks, so thinking spends output budget without
+    // improving the JSON. DeepSeek's native JSON mode also prevents the
+    // malformed/truncated objects that previously escaped this backend as a
+    // successful response and later crashed JSON.parse in pipeline.ts.
+    const structuredOutputOptions =
+      cfg.backend === "deepseek"
+        ? {
+            response_format: { type: "json_object" as const },
+            thinking: { type: "disabled" as const },
+          }
+        : {};
     const resp = await client.chat.completions.create(
       {
         model,
@@ -97,14 +110,42 @@ export async function runOpenAICompat(
         // entries parseable. 8192 covers all observed daily batches with
         // generous headroom. Match the explicit value Anthropic SDK uses.
         max_tokens: 8192,
-        // Don't force JSON mode — not all OpenAI-compat providers support
-        // response_format=json_object, and our prompts + jsonrepair already
-        // handle the slop.
+        // JSON/thinking controls are enabled only for the DeepSeek preset;
+        // generic OpenAI-compatible providers keep their existing behavior.
+        ...structuredOutputOptions,
       },
       { timeout: timeoutMs },
     );
-    const text = (resp.choices[0]?.message?.content ?? "").trim();
+    const choice = resp.choices[0];
+    const text = (choice?.message?.content ?? "").trim();
     const durationMs = Date.now() - started;
+    const finishReason = choice?.finish_reason ?? null;
+    const incompleteReason = !choice
+      ? "response contained no choices"
+      : !text
+        ? "response content was empty"
+        : finishReason && finishReason !== "stop"
+          ? `finish_reason=${finishReason}`
+          : null;
+
+    if (incompleteReason) {
+      const error = new LlmIncompleteResponseError(
+        `${cfg.backend} returned an incomplete response: ${incompleteReason}`,
+      );
+      logLlmCall({
+        ts: new Date(started).toISOString(),
+        backend: cfg.backend,
+        model,
+        durationMs,
+        success: false,
+        inputChars,
+        outputChars: text.length,
+        errorCategory: "other",
+        errorSnippet: error.message,
+      });
+      throw error;
+    }
+
     logLlmCall({
       ts: new Date(started).toISOString(),
       backend: cfg.backend,
@@ -118,6 +159,9 @@ export async function runOpenAICompat(
     });
     return { text, durationMs };
   } catch (err) {
+    // Incomplete responses were already logged above with their real partial
+    // output length. Avoid writing a second, misleading zero-length record.
+    if (err instanceof LlmIncompleteResponseError) throw err;
     const durationMs = Date.now() - started;
     const msg = err instanceof Error ? err.message : String(err);
     logLlmCall({

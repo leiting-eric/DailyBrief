@@ -16,7 +16,11 @@
  * See .env.example for the full list.
  */
 
-import { CLAUDE_MODEL, runClaudeCli } from "./backends/claude-cli";
+import {
+  CLAUDE_MODEL,
+  runClaudeCli,
+  validateClaudeCliAvailable,
+} from "./backends/claude-cli";
 import {
   PRESETS as ANTHROPIC_PRESETS,
   anthropicCompatModel,
@@ -116,7 +120,10 @@ export async function runLlm(opts: LlmRunOptions): Promise<LlmRunResult> {
  */
 export function validateBackendCredentials(): void {
   const backend = getBackend();
-  if (backend === "claude-cli") return;
+  if (backend === "claude-cli") {
+    validateClaudeCliAvailable();
+    return;
+  }
 
   const required: Record<Exclude<LlmBackendId, "claude-cli">, string> = {
     anthropic: "ANTHROPIC_API_KEY",
