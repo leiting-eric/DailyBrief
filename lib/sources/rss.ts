@@ -25,9 +25,20 @@ export async function fetchRss(
   sourceId: string,
   url: string,
   category: Category,
-  options: { limit?: number; useCurl?: boolean } = {},
+  options: {
+    limit?: number;
+    useCurl?: boolean;
+    /** 标题/摘要级关键词过滤：命中任一即保留；留空不过滤 */
+    keywords?: string[];
+  } = {},
 ): Promise<RawArticle[]> {
   const limit = options.limit ?? 30;
+  const keywords = (options.keywords ?? []).map((k) => k.toLowerCase());
+  const matchesKeywords = (a: { title: string; excerpt?: string }): boolean =>
+    keywords.length === 0 ||
+    keywords.some((k) =>
+      `${a.title} ${a.excerpt ?? ""}`.toLowerCase().includes(k),
+    );
 
   let feed;
   if (options.useCurl) {
@@ -50,5 +61,5 @@ export async function fetchRss(
       publishedAt: item.isoDate ? new Date(item.isoDate) : undefined,
       category,
     }))
-    .filter((a) => a.title && a.url);
+    .filter((a) => a.title && a.url && matchesKeywords(a));
 }

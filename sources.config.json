@@ -81,9 +81,35 @@
     "category": "tech",
     "subcategory": "ai-news",
     "lang": "zh",
-    "enabled": false,
+    "enabled": true,
     "locales": [
       "zh"
+    ],
+    "keywords": [
+      "AI",
+      "大模型",
+      "机器人",
+      "芯片",
+      "半导体",
+      "自动驾驶",
+      "智能驾驶",
+      "算力",
+      "开源",
+      "算法",
+      "模型",
+      "GPU",
+      "量子",
+      "云计算",
+      "人工智能",
+      "神经网络",
+      "智能体",
+      "Agent",
+      "英伟达",
+      "OpenAI",
+      "DeepSeek",
+      "Gemini",
+      "Claude",
+      "GPT"
     ]
   },
   {
@@ -137,7 +163,13 @@
       "zh",
       "en"
     ],
-    "keywords": ["LLM", "agent", "RAG", "reasoning", "coding"],
+    "keywords": [
+      "LLM",
+      "agent",
+      "RAG",
+      "reasoning",
+      "coding"
+    ],
     "notes": "Daily trending papers from HuggingFace. Set keywords to filter; empty array or omit for all papers."
   },
   {
@@ -405,7 +437,7 @@
     "url": "https://www.ftchinese.com/rss/news",
     "category": "finance",
     "subcategory": "news",
-    "enabled": false,
+    "enabled": true,
     "locales": [
       "zh"
     ]
@@ -530,14 +562,15 @@
   {
     "id": "wallstreetcn",
     "name": "华尔街见闻",
-    "type": "rss",
-    "url": "https://rsshub.app/wallstreetcn/news/global",
+    "type": "api",
+    "url": "https://api-one.wallstcn.com/apiv1/content/information-flow?channel=global-channel&accept=article&limit=30",
     "category": "finance",
     "subcategory": "news",
-    "enabled": false,
+    "enabled": true,
     "locales": [
       "zh"
-    ]
+    ],
+    "lang": "zh"
   },
   {
     "id": "bbc-world",
@@ -669,6 +702,67 @@
     "url": "https://www.rfa.org/mandarin/RSS",
     "category": "politics",
     "enabled": false,
+    "locales": [
+      "zh"
+    ]
+  },
+  {
+    "id": "sina-finance",
+    "name": "新浪财经",
+    "type": "api",
+    "url": "https://feed.mix.sina.com.cn/api/roll/get?pageid=153&lid=2516&k=&num=50&page=1",
+    "category": "finance",
+    "subcategory": "news",
+    "lang": "zh",
+    "enabled": true,
+    "locales": [
+      "zh"
+    ]
+  },
+  {
+    "id": "sspai",
+    "name": "少数派",
+    "type": "rss",
+    "url": "https://sspai.com/feed",
+    "category": "tech",
+    "subcategory": "cn-community",
+    "lang": "zh",
+    "enabled": true,
+    "locales": [
+      "zh"
+    ]
+  },
+  {
+    "id": "infoq-cn",
+    "name": "InfoQ 中文",
+    "type": "rss",
+    "url": "https://www.infoq.cn/feed.xml",
+    "category": "tech",
+    "subcategory": "cn-community",
+    "lang": "zh",
+    "enabled": true,
+    "locales": [
+      "zh"
+    ]
+  },
+  {
+    "id": "producthunt",
+    "name": "Product Hunt",
+    "type": "rss",
+    "url": "https://www.producthunt.com/feed",
+    "category": "tech",
+    "subcategory": "overseas-community",
+    "enabled": true
+  },
+  {
+    "id": "aihot",
+    "name": "AIHOT",
+    "type": "rss",
+    "url": "https://aihot.virxact.com/feed.xml",
+    "category": "tech",
+    "subcategory": "ai-news",
+    "lang": "zh",
+    "enabled": true,
     "locales": [
       "zh"
     ]
