@@ -30,6 +30,8 @@ const TEXTS_ZH = {
   catPolitics: "时政观察",
   catTrading: "市场行情",
   catCommunity: "社区讨论",
+  catArt: "艺术",
+  subArt: "艺术",
   subAiNews: "AI 媒体",
   subTrendingPapers: "热门论文",
   subXViral: "X 推文",
@@ -79,6 +81,8 @@ const TEXTS_EN: typeof TEXTS_ZH = {
   catPolitics: "World",
   catTrading: "Markets",
   catCommunity: "Community",
+  catArt: "Art",
+  subArt: "Art",
   subAiNews: "AI Media",
   subTrendingPapers: "Trending Papers",
   subXViral: "X Viral",
@@ -171,13 +175,14 @@ const SUBCATEGORY_ORDER: Partial<Record<Category, string[]>> = {
   // Locale filtering at registry level decides which actually appears:
   // zh mode keeps cn-community (V2EX / LinuxDo); en mode keeps
   // overseas-community (Hacker News / r/stocks).
-  tech: ["github-trending", "trending-papers", "x-viral", "ai-news", "cn-community", "overseas-community"],
+  tech: ["github-trending", "trending-papers", "x-viral", "ai-news", "cn-community", "overseas-community", "art"],
   finance: ["news"],
   politics: ["world"],
 };
 
 const TECH_MAIN_SUBS = new Set(["github-trending", "trending-papers", "x-viral", "ai-news"]);
 const TECH_COMMUNITY_SUBS = new Set(["cn-community", "overseas-community"]);
+const TECH_ART_SUBS = new Set(["art"]);
 
 const SUBCATEGORY_LABELS: Record<string, string> = {
   "github-trending": "GitHub Trending",
@@ -185,6 +190,7 @@ const SUBCATEGORY_LABELS: Record<string, string> = {
   "cn-community": STR.subCnCommunity,
   "overseas-community": STR.subOverseasCommunity,
   "ai-news": STR.subAiNews,
+  "art": STR.subArt,
   "x-viral": STR.subXViral,
   "blog-weekly": STR.subBlogWeekly,
   news: STR.subFinanceNews,
@@ -242,6 +248,7 @@ export const MERGED_SUBGROUP_LIMITS: Record<string, number> = {
   "tech:ai-news": 15,
   "finance:news": 12,
   "politics:world": 15,
+  "tech:art": 12,
 };
 
 /**
@@ -540,6 +547,7 @@ export function renderHtml(
   // forums as their own top-level tab per UX preference.
   const techMainSubs = raw.tech.filter((s) => TECH_MAIN_SUBS.has(s.id));
   const techCommunitySubs = raw.tech.filter((s) => TECH_COMMUNITY_SUBS.has(s.id));
+  const techArtSubs = raw.tech.filter((s) => TECH_ART_SUBS.has(s.id));
 
   const sumItems = (subs: SubGroup[]) =>
     subs.reduce(
@@ -551,6 +559,7 @@ export function renderHtml(
     finance: sumItems(raw.finance),
     politics: sumItems(raw.politics),
     community: sumItems(techCommunitySubs),
+    art: sumItems(techArtSubs),
   };
 
   return `<!doctype html>
@@ -1204,6 +1213,7 @@ export function renderHtml(
     <button class="tab" data-tab="politics">${CATEGORY_LABELS.politics}<span class="count">${counts.politics}</span></button>
     <button class="tab" data-tab="finance">${CATEGORY_LABELS.finance}<span class="count">${counts.finance}</span></button>
     ${techCommunitySubs.length > 0 ? `<button class="tab" data-tab="community">${STR.catCommunity}<span class="count">${counts.community}</span></button>` : ""}
+    ${techArtSubs.length > 0 ? `<button class="tab" data-tab="art">${STR.catArt}<span class="count">${counts.art}</span></button>` : ""}
   </nav>
 
   <section class="panel active" data-panel="tech">
@@ -1218,6 +1228,9 @@ export function renderHtml(
   </section>
   ${techCommunitySubs.length > 0 ? `<section class="panel" data-panel="community">
     ${renderRawCategoryPanel("tech", techCommunitySubs)}
+  </section>` : ""}
+  ${techArtSubs.length > 0 ? `<section class="panel" data-panel="art">
+    ${renderRawCategoryPanel("tech", techArtSubs)}
   </section>` : ""}
 
   <footer>
