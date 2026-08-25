@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import path from "node:path";
 import { classifyError, logLlmCall } from "../log";
 import type { LlmRunOptions, LlmRunResult } from "../llm";
@@ -11,6 +11,22 @@ function resolveCliPath(): string {
   const appdata = process.env.APPDATA;
   if (appdata) return path.join(appdata, "npm", "claude.cmd");
   return "claude";
+}
+
+export function validateClaudeCliAvailable(): void {
+  const cli = resolveCliPath();
+  const probe = spawnSync(cli, ["--version"], {
+    encoding: "utf8",
+    shell: process.platform === "win32",
+    stdio: "ignore",
+  });
+  if (probe.error || probe.status !== 0) {
+    throw new Error(
+      "LLM_BACKEND=claude-cli but the 'claude' CLI is unavailable. " +
+        "Install/login to Claude Code, or create .env.local with an API backend " +
+        "such as LLM_BACKEND=deepseek and its matching API key.",
+    );
+  }
 }
 
 /**
@@ -38,7 +54,10 @@ export function runClaudeCli({
 
   return new Promise((resolve, reject) => {
     const child = spawn(cli, args, {
-      shell: true,
+      // Unix can execute the binary directly, preserving every prompt
+      // argument literally. Windows npm installs a .cmd shim, which still
+      // requires the command shell.
+      shell: process.platform === "win32",
       stdio: ["pipe", "pipe", "pipe"],
     });
 
