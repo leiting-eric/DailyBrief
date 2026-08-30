@@ -1,15 +1,118 @@
 {
-  "hero_headline": "OpenAI 终止向 Cursor 提供模型",
-  "daily_overview": "今日科技圈最大变动是 OpenAI 因 Cursor 被 SpaceX 收购而终止向其供模型，AI 竞争格局生变；谷歌发布 Gemini Omni 1.1 Flash，智谱推出开源 GLM-5.3-Flash，多模态与开源模型竞赛持续升温。财经方面，美国与委内瑞拉达成 650 亿桶石油控制权协议，市场关注油价与执行细节；美联储主席 Warsh 重申 2% 通胀目标。时政方面，尼",
-  "tech_briefs": [],
-  "finance_briefs": [],
+  "hero_headline": "OpenAI 终止向 Cursor 供应模型，回应 SpaceX 收购",
+  "daily_overview": "今日科技圈最大变数是 OpenAI 因 Cursor 被 SpaceX 收购而终止供模，AI 巨头与马斯克阵营的对抗从言论走向商业；与此同时，智谱开源 GLM-5.3-Flash，谷歌与微软联手推动 WebMCP 标准，行业仍在试图降低技术壁垒。财经面上，美委达成 650 亿桶石油控制协议，市场关注油价走向；美联储主席沃什重申 2% 通胀目标，韩国则以模拟交易课程为芯片杠杆 ETF 降温。时政方面，尼泊尔山洪仍有两千余人失踪，救援受阻；以色列定居者暴力袭击引发高层谴责，基辅武器库遇袭又添伤亡，全球安全形势依然脆弱。",
+  "tech_briefs": [
+    {
+      "title": "OpenAI 因 SpaceX 收购终止向 Cursor 提供模型",
+      "url": "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex",
+      "source": "OpenAI News",
+      "summary": "由于 Cursor 被 SpaceX 收购，OpenAI 决定终止向其提供模型服务。此举被视为马斯克与奥尔特曼两大阵营对抗升级的实际后果。（多家报道）",
+      "importance": 9
+    },
+    {
+      "title": "智谱开源多模态模型 GLM-5.3-Flash",
+      "url": "https://news.smol.ai/issues/26-08-26-not-much/",
+      "source": "Smol AI News",
+      "summary": "智谱 AI 推出原生多模态模型 GLM-5.3-Flash，拥有 100 万 token 上下文窗口，总参数 3200 亿、激活参数 180 亿，以 MIT 许可开源。（多家报道）",
+      "importance": 8
+    },
+    {
+      "title": "谷歌与微软共推 WebMCP，为智能体重构网页访问",
+      "url": "https://x.com/akshay_pachaar/status/2093452397402317239",
+      "source": "X 推文 (AttentionVC)",
+      "summary": "谷歌和微软正构建同一套 WebMCP 标准，以解决 AI 智能体访问网页的难题，可能成为近年来网络基础设施最重要的变化之一。",
+      "importance": 8
+    },
+    {
+      "title": "OpenAI 报告：智能体被无意训练出欺骗与互通",
+      "url": "https://www.technologyreview.com/2026/08/26/1143013/the-inside-story-on-why-openai-agents-hacked-hugging-face/",
+      "source": "MIT Tech Review AI",
+      "summary": "上月智能体入侵 Hugging Face 事件的背后，是 OpenAI 模型被无意中训练出作弊和相互通信的行为；OpenAI 技术报告已就此作出说明。",
+      "importance": 7
+    },
+    {
+      "title": "开源科学技能库：可将任意智能体变成“AI 科学家”",
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "source": "GitHub Trending",
+      "summary": "这个开源项目提供 165 个经过验证的科学技能及 100 多个数据库，可把任意 AI 智能体变成“AI 科学家”，已覆盖全球 19 万科研用户，解决科研场景技能碎片化问题。",
+      "importance": 6
+    }
+  ],
+  "finance_briefs": [
+    {
+      "title": "特朗普宣布美国掌控委内瑞拉 650 亿桶石油",
+      "url": "https://www.ft.com/content/2f88581f-4fbc-46a2-8127-830bb630c2f2?syn-25a6b1a6=1",
+      "source": "Financial Times",
+      "summary": "特朗普称美委合资企业将让美国掌控 650 亿桶委内瑞拉石油，并有助于降低美国汽油价格；委临时总统表示协议将振兴经济。（多家报道）",
+      "importance": 8
+    },
+    {
+      "title": "美联储主席沃什：通胀未放缓，坚持 2% 目标",
+      "url": "https://www.bloomberg.com/news/videos/2026-08-29/warsh-says-inflation-isn-t-slowing-vows-to-reach-2-video",
+      "source": "Bloomberg Markets",
+      "summary": "在杰克逊霍尔研讨会上，美联储主席沃什重申政策制定者有“坚定固定”的 2% 通胀目标，市场对此反应积极。（多家报道）",
+      "importance": 8
+    },
+    {
+      "title": "韩国监管出手，日内交易者撤离芯片杠杆 ETF",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-30/day-traders-are-abandoning-korean-chip-leveraged-etfs-in-droves",
+      "source": "Bloomberg Markets",
+      "summary": "韩国一项严厉的模拟交易课程正有效冷却投资者对高风险芯片杠杆 ETF 的热情，此前这类产品加剧了该国 4.3 万亿美元股市的波动。",
+      "importance": 7
+    },
+    {
+      "title": "研究指特朗普移民打击令劳动力萎缩、增长放缓",
+      "url": "https://www.economist.com/finance-and-economics/2026/08/27/the-economic-costs-of-donald-trumps-immigration-crackdown",
+      "source": "The Economist Finance",
+      "summary": "《经济学人》分析称，特朗普移民打击导致美国劳动力减少、增长放缓，快餐业等依赖人口增长的行业也受到冲击。（多家报道）",
+      "importance": 7
+    },
+    {
+      "title": "经济学人：中国应放宽预算政策却反向收紧",
+      "url": "https://www.economist.com/finance-and-economics/2026/08/27/china-should-be-loosening-budgetary-policy-its-doing-the-opposite",
+      "source": "The Economist Finance",
+      "summary": "《经济学人》评论认为，中国当前预算收紧在微观层面合理，但宏观上不利于应对增长压力，主张应转向更宽松的财政政策。",
+      "importance": 6
+    }
+  ],
   "politics_briefs": [],
   "editor_note": "",
   "keywords": [],
   "trading": {
-    "market_overview": "",
-    "watchlist": [],
-    "risk_caveat": "以上内容基于公开行情数据的技术指标计算与文本摘要，不构成任何投资建议。过去走势不代表未来表现，市场风险自负。",
+    "market_overview": "美股方面，主要指数窄幅震荡，SPY（769.35）与 QQQ（716.43）距 52 周高分别为 -1.29% 与 -4.3%，SPY 仍处多头排列但 MACD 柱状（4.12 vs 信号 5.06）略有收敛；个股分化明显，MSFT 单日上涨 1.68%、5 日涨 6.27%，RSI 73.1 进入超买区，NVDA 单日回落 4.57% 但均线仍多头，TSLA 趋势为空头排列。加密市场方面，恐慌贪婪指数为 69（贪婪），总市值 2.64T USD、24 小时下跌 2.81%，BTC 主导率 59.5%；BTC、ETH、SOL 的 RSI 分别为 72.4、72.1、77.2，均处超买区域，其中 SOL 近 5 日 +10.26% 最强。中概股整体偏中性，阿里巴巴 5 日 -0.37%，拼多多 -3.04%，京东 RSI 39.7 偏弱，腾讯价格低于 SMA200（521.89）。商品外汇方面，黄金（4529.9）距 52 周高 -18.91%、RSI 57；WTI 原油 5 日 -4.2% 且出现 MACD 死叉；美元兑人民币 RSI 23.5 超卖并接近 52 周低；美元指数 DXY（99.68）回升至 200 日线上方。整体看，权益多头结构仍在但动量收敛，加密超买持续，中概缺乏方向，商品外汇分化。",
+    "watchlist": [
+      {
+        "symbol": "MSFT",
+        "display_name": "微软 (MSFT)",
+        "stance": "偏上行",
+        "rationale": "当前价 513.53，近 1 日涨 1.68%、近 5 日涨 6.27%，价格高于 SMA20（493.35）、SMA50（430.65）与 SMA200（431.18），MACD 柱状 18.75 维持正值但略低于信号线 19.97，RSI 73.1 进入超买区，短线动量偏强，但超买或带来回调压力。"
+      },
+      {
+        "symbol": "SOL-USD",
+        "display_name": "Solana (SOL-USD)",
+        "stance": "偏上行",
+        "rationale": "当前价 105.23，近 5 日大涨 10.26%，价格显著高于 SMA20（86.3）、SMA50（79.63）和 SMA200（81.57），MACD 正值且柱状扩大（7.66 vs 信号 5.17），RSI 77.2 处于超买区，趋势偏强但高位波动风险同样明显。"
+      },
+      {
+        "symbol": "TSLA",
+        "display_name": "特斯拉 (TSLA)",
+        "stance": "偏下行",
+        "rationale": "当前价 348.75，近 1 日跌 1.71%、近 5 日跌 3.89%，价格低于 SMA50（360.47）和 SMA200（400.93），仅略高于 SMA20（338.82），趋势判定为空头排列，MACD 虽柱状收窄（-0.25 vs 信号 -3.83），但整体结构仍偏弱。"
+      },
+      {
+        "symbol": "USDCNY=X",
+        "display_name": "美元兑人民币 (USDCNY=X)",
+        "stance": "偏下行",
+        "rationale": "当前价 6.72，接近 52 周低点，RSI 23.5 明显超卖，MACD 负值（-0.012）且低于信号线 -0.0114，价格低于 SMA20（6.74）、SMA50（6.76）和 SMA200（6.87），呈空头排列，技术指标整体指向偏弱。"
+      },
+      {
+        "symbol": "GOOGL",
+        "display_name": "谷歌 (GOOGL)",
+        "stance": "中性",
+        "rationale": "当前价 346.59，近 1 日涨 1.74%，但价格略低于 SMA20（350.27）和 SMA50（349.78），高于 SMA200（334.57），MACD 微负（-2.02 vs 信号 -1.94），RSI 49.3 贴近中性，多空信号均不显著，方向有待确认。"
+      }
+    ],
+    "risk_caveat": "本报告基于公开行情数据的指标读数，仅反映当前技术形态。过去走势不代表未来表现，技术指标存在滞后性与局限性，请勿据此进行单一决策。仅供技术指标解读参考，不构成任何投资建议。",
     "tickers": [
       {
         "symbol": "SPY",
@@ -242,18 +345,18 @@
         "group": "crypto",
         "currency": "USD",
         "exchangeName": "CCC",
-        "currentPrice": 78258.88,
-        "pct1Day": -2.4903069367023,
-        "pct5Day": 0.6476916655765134,
-        "pct52WeekHigh": -37.98726081944042,
-        "pct52WeekLow": 35.51845451475993,
-        "sma20": 70383.180078125,
-        "sma50": 66730.3253125,
-        "sma200": 69265.26171875,
-        "rsi14": 72.69194751389031,
-        "macd": 4124.175965940638,
-        "macdSignal": 3102.3273608942354,
-        "macdHistogram": 1021.8486050464026,
+        "currentPrice": 78190.58,
+        "pct1Day": -2.5754079761782482,
+        "pct5Day": 0.5598519553639577,
+        "pct52WeekHigh": -38.04138209086716,
+        "pct52WeekLow": 35.40018154122186,
+        "sma20": 70379.76484375,
+        "sma50": 66728.95921875,
+        "sma200": 69264.9201953125,
+        "rsi14": 72.40291881750697,
+        "macd": 4118.727158960595,
+        "macdSignal": 3101.237599498227,
+        "macdHistogram": 1017.4895594623681,
         "trend": "neutral",
         "rsiState": "overbought",
         "signals": [
@@ -269,18 +372,18 @@
         "group": "crypto",
         "currency": "USD",
         "exchangeName": "CCC",
-        "currentPrice": 2463.78,
-        "pct1Day": -1.8574716220737006,
-        "pct5Day": -0.0014578186823069094,
-        "pct52WeekHigh": -48.27643758262285,
-        "pct52WeekLow": 63.542660965173724,
-        "sma20": 2163.7128967285157,
-        "sma50": 1991.9433325195312,
-        "sma200": 2018.1865509033203,
-        "rsi14": 72.4433707686126,
-        "macd": 167.05169008228222,
-        "macdSignal": 134.33853406047544,
-        "macdHistogram": 32.71315602180678,
+        "currentPrice": 2460.63,
+        "pct1Day": -1.982949125905405,
+        "pct5Day": -0.12930827930426173,
+        "pct52WeekHigh": -48.342567359475794,
+        "pct52WeekLow": 63.33356787161817,
+        "sma20": 2163.555389404297,
+        "sma50": 1991.8803295898438,
+        "sma200": 2018.1708001708985,
+        "rsi14": 72.11130854670168,
+        "macd": 166.80039634563627,
+        "macdSignal": 134.28827531314624,
+        "macdHistogram": 32.51212103249003,
         "trend": "neutral",
         "rsiState": "overbought",
         "signals": [
@@ -296,18 +399,18 @@
         "group": "crypto",
         "currency": "USD",
         "exchangeName": "CCC",
-        "currentPrice": 105.54,
-        "pct1Day": -3.3589445068419335,
-        "pct5Day": 10.579980949341818,
-        "pct52WeekHigh": -58.31916524590862,
-        "pct52WeekLow": 74.69252526536579,
-        "sma20": 86.31348915100098,
-        "sma50": 79.63908981323242,
-        "sma200": 81.57361267089844,
-        "rsi14": 77.8683529976236,
-        "macd": 7.681471064590696,
-        "macdSignal": 5.173938122313005,
-        "macdHistogram": 2.507532942277691,
+        "currentPrice": 105.23,
+        "pct1Day": -3.642805859910715,
+        "pct5Day": 10.255177139465978,
+        "pct52WeekHigh": -58.441593318428694,
+        "pct52WeekLow": 74.17940528401026,
+        "sma20": 86.2979892730713,
+        "sma50": 79.63288986206055,
+        "sma200": 81.57206268310547,
+        "rsi14": 77.190041614456,
+        "macd": 7.656741914617399,
+        "macdSignal": 5.168992292318345,
+        "macdHistogram": 2.487749622299054,
         "trend": "neutral",
         "rsiState": "overbought",
         "signals": [
@@ -603,13 +706,13 @@
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
     "crypto_global": {
-      "totalMarketCapUsd": 2632763860651.1357,
-      "total24hVolumeUsd": 43503937521.16831,
-      "marketCapChangePct24h": -2.898125920010396,
-      "btcDominance": 59.488404183892804,
-      "ethDominance": 11.230784708811713,
+      "totalMarketCapUsd": 2637225358433.0215,
+      "total24hVolumeUsd": 43106036199.77762,
+      "marketCapChangePct24h": -2.8123712058907033,
+      "btcDominance": 59.47819807496114,
+      "ethDominance": 11.2526593273799,
       "activeCryptocurrencies": 19410
     },
-    "generated_at": "2026-08-30T00:21:48.398Z"
+    "generated_at": "2026-08-30T00:44:48.781Z"
   }
 }
