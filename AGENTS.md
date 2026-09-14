@@ -39,7 +39,7 @@ sources.config.json   # SINGLE SOURCE OF TRUTH for the source registry
 
 1. **`sources.config.json` is the only place sources live.** `lib/sources/registry.ts` is just a JSON loader + locale filter. Never hardcode a source list in TS.
 
-2. **LLM calls go through `lib/ai/llm.ts` `runLlm()`.** Five backends behind `LLM_BACKEND` env var: `claude-cli` (default), `anthropic`, `openai`, `deepseek`, `minimax`. Never import a specific backend directly — that defeats the switch.
+2. **LLM calls go through `lib/ai/llm.ts` `runLlm()`.** Backends behind `LLM_BACKEND` include `claude-cli` (default), `anthropic`, `openai`, `deepseek`, `minimax`, `atlascloud`, and `zhipu`. Never import a specific backend directly — that defeats the switch.
 
 3. **Date keying uses `lib/utils.ts` `todayKey()`.** Honors `REPORT_TZ` env var; defaults to system local TZ. Don't hardcode `Asia/Shanghai` or `UTC` anywhere.
 

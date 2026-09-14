@@ -10,6 +10,7 @@
  *   LLM_BACKEND=openai       (OpenAI Chat Completions)
  *   LLM_BACKEND=deepseek     (DeepSeek, OpenAI-compatible)
  *   LLM_BACKEND=minimax      (MiniMax, OpenAI-compatible)
+ *   LLM_BACKEND=atlascloud   (Atlas Cloud, OpenAI-compatible)
  *   LLM_BACKEND=zhipu        (Zhipu AI / 智谱, Anthropic-compatible)
  *
  * Per-backend config (API keys, models, base URLs) lives in .env.local.
@@ -45,6 +46,7 @@ export type LlmBackendId =
   | "openai"
   | "deepseek"
   | "minimax"
+  | "atlascloud"
   | "zhipu";
 
 const VALID_BACKENDS: ReadonlySet<LlmBackendId> = new Set([
@@ -53,6 +55,7 @@ const VALID_BACKENDS: ReadonlySet<LlmBackendId> = new Set([
   "openai",
   "deepseek",
   "minimax",
+  "atlascloud",
   "zhipu",
 ]);
 
@@ -80,6 +83,7 @@ function getActiveModel(backend: LlmBackendId): string {
     case "openai":
     case "deepseek":
     case "minimax":
+    case "atlascloud":
       return openaiCompatModel(OPENAI_PRESETS[backend]);
   }
 }
@@ -100,6 +104,7 @@ export async function runLlm(opts: LlmRunOptions): Promise<LlmRunResult> {
     case "openai":
     case "deepseek":
     case "minimax":
+    case "atlascloud":
       return runOpenAICompat(opts, OPENAI_PRESETS[backend]);
   }
 }
@@ -123,6 +128,7 @@ export function validateBackendCredentials(): void {
     openai: "OPENAI_API_KEY",
     deepseek: "DEEPSEEK_API_KEY",
     minimax: "MINIMAX_API_KEY",
+    atlascloud: "ATLASCLOUD_API_KEY",
     zhipu: "ZHIPU_API_KEY",
   };
   const requiredVar = required[backend];

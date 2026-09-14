@@ -113,13 +113,13 @@ Two ways:
 
 ## Change LLM provider
 
-All LLM calls funnel through [`lib/ai/llm.ts`](lib/ai/llm.ts) `runLlm()`, which dispatches to one of five backends based on the `LLM_BACKEND` env var:
+All LLM calls funnel through [`lib/ai/llm.ts`](lib/ai/llm.ts) `runLlm()`, which dispatches to a selected backend based on the `LLM_BACKEND` env var:
 
 | `LLM_BACKEND` | Implementation | Auth |
 |---|---|---|
 | `claude-cli` *(default)* | [`lib/ai/backends/claude-cli.ts`](lib/ai/backends/claude-cli.ts) — spawns the local `claude` CLI | Whatever the CLI is logged in as (e.g. Max subscription) |
 | `anthropic` | [`lib/ai/backends/anthropic.ts`](lib/ai/backends/anthropic.ts) — direct API | `ANTHROPIC_API_KEY` |
-| `openai` / `deepseek` / `minimax` | [`lib/ai/backends/openai-compat.ts`](lib/ai/backends/openai-compat.ts) — OpenAI-compatible Chat Completions | `OPENAI_API_KEY` / `DEEPSEEK_API_KEY` / `MINIMAX_API_KEY` |
+| `openai` / `deepseek` / `minimax` / `atlascloud` | [`lib/ai/backends/openai-compat.ts`](lib/ai/backends/openai-compat.ts) — OpenAI-compatible Chat Completions | Matching provider `*_API_KEY` |
 
 To **switch backend**: set `LLM_BACKEND=...` in `.env.local`. No code changes.
 
@@ -134,7 +134,7 @@ Whether you need any secret depends on how you've deployed:
 | Setup | Secrets you need |
 |---|---|
 | Local install + default `claude-cli` backend (reuses Claude Code OAuth) | **None** — just be logged into `claude` CLI |
-| Local install + any API backend (`anthropic` / `openai` / `deepseek` / `minimax`) | That backend's `*_API_KEY` in `.env.local` |
+| Local install + any API backend (`anthropic` / `openai` / `deepseek` / `minimax` / `atlascloud`) | That backend's `*_API_KEY` in `.env.local` |
 | GitHub Actions deploy | The chosen backend's API key as a GH **Secret** (Claude OAuth is unreachable from GH runners) — see README §"GH Actions" for the secret/variable matrix |
 
 Adding a NEW secret (e.g. you wire up a paid data source like Bloomberg):
