@@ -86,12 +86,12 @@ requireCommand("node", "Install Node 20+: https://nodejs.org/");
 requireCommand("npm", "(should come with Node)");
 
 // claude CLI is the *default* LLM backend but not strictly required — users
-// running the OpenAI / Anthropic / DeepSeek / MiniMax API backends never call
+// running an API backend never calls
 // claude. Warn and continue so non-Claude-Code installs aren't blocked.
 if (!hasCommand("claude")) {
   console.warn(
     "[warn] 'claude' CLI not found on PATH.\n" +
-      "       Fine if you plan to use an API-based LLM backend (LLM_BACKEND=openai|anthropic|deepseek|minimax).\n" +
+      "       Fine if you plan to use an API-based LLM backend (for example LLM_BACKEND=openai|atlascloud).\n" +
       "       For the default claude-cli backend: npm install -g @anthropic-ai/claude-code\n",
   );
 }

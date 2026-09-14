@@ -7,12 +7,12 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node 20+](https://img.shields.io/badge/node-20%2B-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)](https://www.typescriptlang.org/)
-[![LLM: pluggable](https://img.shields.io/badge/LLM-pluggable%20(6%20backends)-orange.svg)](#-llm-后端配置)
+[![LLM: pluggable](https://img.shields.io/badge/LLM-pluggable%20(7%20backends)-orange.svg)](#-llm-后端配置)
 [![Deploy: GH Actions](https://img.shields.io/badge/deploy-GitHub%20Actions-2088ff.svg)](#a-github-actions--pages零基础设施推荐)
 [![Demo: live](https://img.shields.io/badge/demo-leiting--eric.github.io%2FDailyBrief-brightgreen.svg)](https://leiting-eric.github.io/DailyBrief)
 [![Stars](https://img.shields.io/github/stars/leiting-eric/DailyBrief?style=social)](https://github.com/leiting-eric/DailyBrief)
 
-> **你的私人 AI 每日简报，跑在你自己掌控的基础设施上。** 默认启用 26 个数据源 · LLM 摘要 · 21 个股票/加密标的**技术指标 + AI 交易点评** · 中英双语 · 6 个 LLM 后端可选。
+> **你的私人 AI 每日简报，跑在你自己掌控的基础设施上。** 默认启用 26 个数据源 · LLM 摘要 · 21 个股票/加密标的**技术指标 + AI 交易点评** · 中英双语 · 7 个 LLM 后端可选。
 >
 > **三种部署任选**：[**🚀 5 分钟 Fork 到 GitHub Actions**](#a-github-actions--pages零基础设施推荐) · [**💻 本地一键装**](#b-本地一键装) · [**🤖 一句话让 AI Agent 帮你装**](#c-给-ai-agent-一句话装)。
 
@@ -27,7 +27,7 @@
 
 - **🌍 全网多源聚合**：默认启用 26 个数据源，覆盖硅谷科技、AI 前沿、全球财经、国际时政、中文社区，一份报告通吃
 - **📈 21 个标的实时行情**：美股 / 加密 / 港股 / 商品外汇 / 宏观信号，附 SMA / RSI / MACD 技术指标 + LLM 每日交易点评
-- **🤖 6 个 LLM 后端可插拔**：Claude CLI / Anthropic / OpenAI / DeepSeek / MiniMax / Zhipu，一个环境变量切换，不绑死任何家
+- **🤖 7 个 LLM 后端可插拔**：Claude CLI / Anthropic / OpenAI / DeepSeek / MiniMax / Atlas Cloud / Zhipu，一个环境变量切换，不绑死任何家
 - **🌐 中英双语**：`REPORT_LOCALE=en` 一切——数据源、prompt、UI 文案、Bullish/Bearish stance 全套切英文
 - **🚀 部署灵活**：GitHub Actions（零基础设施）/ 本地系统调度器 / 自托管服务器三选一，互不冲突可并存
 - **🆓 数据源零 API key**：所有源走免费公开端点（RSS / 公开 JSON），不需要付费订阅
@@ -100,6 +100,7 @@
    | 🐋 **DeepSeek V4 Flash**（默认，便宜大碗，中文友好） | `DEEPSEEK_API_KEY` | 不填或填 `deepseek` | ~$0.01-0.02 / 天，月 < $1 |
    | 🟣 **Anthropic Sonnet**（prompt 按 Sonnet 调优） | `ANTHROPIC_API_KEY` | `anthropic` | ~$0.03-0.05 / 天，月 < $2 |
    | 🟢 **OpenAI** | `OPENAI_API_KEY` | `openai` | gpt-4o-mini ~$0.02 / 天 |
+   | ☁️ **Atlas Cloud** | `ATLASCLOUD_API_KEY` | `atlascloud` | 按所选模型计费 |
    | 🔵 **MiniMax** | `MINIMAX_API_KEY` | `minimax` | 类似 DeepSeek 量级 |
    | 🧠 **Zhipu / 智谱** | `ZHIPU_API_KEY` | `zhipu` | 看服务方定价 |
    | 🌀 **中转站 / 反代 / 其他 OpenAI 兼容服务**（Moonshot / SiliconFlow / OpenRouter / 自建 Claude 反代 / 本地 Ollama / LM Studio 等） | `LLM_API_KEY` | `openai`（极少数 Anthropic 协议反代填 `anthropic`） | 看服务方定价 |
@@ -325,6 +326,7 @@ REPORT_LOCALE=zh    # 默认 — 中文 mode，含 V2EX / LinuxDo / DW 中文等
 | 🟢 `openai` | `OPENAI_API_KEY` | `gpt-4o-mini` | `api.openai.com/v1` |
 | 🐋 `deepseek` | `DEEPSEEK_API_KEY` | `deepseek-v4-flash` | `api.deepseek.com/v1` |
 | 🔵 `minimax` | `MINIMAX_API_KEY` | `MiniMax-M2.7` | `api.minimax.io/v1` <sup>1</sup> |
+| ☁️ `atlascloud` | `ATLASCLOUD_API_KEY` | `deepseek-ai/deepseek-v4-pro` | `api.atlascloud.ai/v1` |
 | 🧠 `zhipu` | `ZHIPU_API_KEY` | `claude-sonnet-4-6` | `open.bigmodel.cn/api/anthropic` |
 
 <sup>1</sup> 中国大陆访问设 `MINIMAX_BASE_URL=https://api.minimaxi.com/v1`。
@@ -354,6 +356,11 @@ OPENAI_API_KEY=sk-...
 LLM_BACKEND=minimax
 MINIMAX_API_KEY=...
 # MINIMAX_BASE_URL=https://api.minimaxi.com/v1   # 国内访问用这条
+
+# Atlas Cloud（OpenAI 兼容）
+LLM_BACKEND=atlascloud
+ATLASCLOUD_API_KEY=...
+# LLM_MODEL=deepseek-ai/deepseek-v4-pro  # 可选
 
 # Zhipu / 智谱（Anthropic 协议兼容）
 LLM_BACKEND=zhipu
@@ -539,12 +546,12 @@ MIT
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node 20+](https://img.shields.io/badge/node-20%2B-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)](https://www.typescriptlang.org/)
-[![LLM: pluggable](https://img.shields.io/badge/LLM-pluggable%20(6%20backends)-orange.svg)](#-llm-backend-configuration)
+[![LLM: pluggable](https://img.shields.io/badge/LLM-pluggable%20(7%20backends)-orange.svg)](#-llm-backend-configuration)
 [![Deploy: GH Actions](https://img.shields.io/badge/deploy-GitHub%20Actions-2088ff.svg)](#a-github-actions--pages-zero-infra-recommended)
 [![Demo: live](https://img.shields.io/badge/demo-leiting--eric.github.io%2FDailyBrief-brightgreen.svg)](https://leiting-eric.github.io/DailyBrief)
 [![Stars](https://img.shields.io/github/stars/leiting-eric/DailyBrief?style=social)](https://github.com/leiting-eric/DailyBrief)
 
-> **Your own AI-curated daily news brief, on infrastructure you control.** 26 sources enabled by default · LLM summaries · 21-ticker market panel with SMA/RSI/MACD signals + AI commentary · bilingual (zh/en) · 6 swappable LLM backends.
+> **Your own AI-curated daily news brief, on infrastructure you control.** 26 sources enabled by default · LLM summaries · 21-ticker market panel with SMA/RSI/MACD signals + AI commentary · bilingual (zh/en) · 7 swappable LLM backends.
 >
 > **Three deployment paths, pick one:** [**🚀 5-min GitHub Actions fork**](#a-github-actions--pages-zero-infra-recommended) · [**💻 local one-liner install**](#b-local-one-liner-install) · [**🤖 have an AI agent install it for you**](#c-have-an-ai-agent-install-it-for-you).
 
@@ -559,7 +566,7 @@ MIT
 
 - **🌍 Multi-source aggregation** — 26 sources enabled by default, spanning Silicon Valley tech, AI frontier, global finance, international politics, and developer communities. One report covers it all.
 - **📈 21 live tickers** — US stocks / crypto / HK / commodities / macro signals, with SMA / RSI / MACD indicators + daily LLM-written trading commentary
-- **🤖 6 swappable LLM backends** — Claude CLI / Anthropic / OpenAI / DeepSeek / MiniMax / Zhipu. One env var to switch, no vendor lock-in.
+- **🤖 7 swappable LLM backends** — Claude CLI / Anthropic / OpenAI / DeepSeek / MiniMax / Atlas Cloud / Zhipu. One env var to switch, no vendor lock-in.
 - **🌐 Bilingual (zh/en)** — set `REPORT_LOCALE=en` to flip the entire stack: sources, prompts, UI text, Bullish/Bearish stance labels — all switch.
 - **🚀 Flexible deployment** — GitHub Actions (zero infra) / local OS scheduler / self-hosted server — pick one or run them in parallel
 - **🆓 Zero data-source API keys** — every source uses free public endpoints (RSS / public JSON), no paid subscriptions
@@ -632,6 +639,7 @@ The registry currently contains 53 sources, with 26 enabled by default. After lo
    | 🐋 **DeepSeek V4 Flash** (default; cheap, China-friendly) | `DEEPSEEK_API_KEY` | leave unset or `deepseek` | ~$0.01-0.02/day, <$1/month |
    | 🟣 **Anthropic Sonnet** (prompts tuned for it) | `ANTHROPIC_API_KEY` | `anthropic` | ~$0.03-0.05/day, <$2/month |
    | 🟢 **OpenAI** | `OPENAI_API_KEY` | `openai` | gpt-4o-mini ~$0.02/day |
+   | ☁️ **Atlas Cloud** | `ATLASCLOUD_API_KEY` | `atlascloud` | Depends on selected model |
    | 🔵 **MiniMax** | `MINIMAX_API_KEY` | `minimax` | Similar to DeepSeek |
    | 🧠 **Zhipu** | `ZHIPU_API_KEY` | `zhipu` | Depends on provider |
    | 🌀 **Proxy / aggregator / any OpenAI-compatible service** (Moonshot, SiliconFlow, OpenRouter, self-hosted Claude relay, local Ollama / LM Studio, ...) | `LLM_API_KEY` | `openai` (use `anthropic` only if the proxy speaks Anthropic protocol — rare) | Depends on provider |
@@ -857,6 +865,7 @@ The project switches backends via the `LLM_BACKEND` environment variable. **Defa
 | 🟢 `openai` | `OPENAI_API_KEY` | `gpt-4o-mini` | `api.openai.com/v1` |
 | 🐋 `deepseek` | `DEEPSEEK_API_KEY` | `deepseek-v4-flash` | `api.deepseek.com/v1` |
 | 🔵 `minimax` | `MINIMAX_API_KEY` | `MiniMax-M2.7` | `api.minimax.io/v1` <sup>1</sup> |
+| ☁️ `atlascloud` | `ATLASCLOUD_API_KEY` | `deepseek-ai/deepseek-v4-pro` | `api.atlascloud.ai/v1` |
 | 🧠 `zhipu` | `ZHIPU_API_KEY` | `claude-sonnet-4-6` | `open.bigmodel.cn/api/anthropic` |
 
 <sup>1</sup> Inside mainland China, set `MINIMAX_BASE_URL=https://api.minimaxi.com/v1`.
@@ -886,6 +895,11 @@ OPENAI_API_KEY=sk-...
 LLM_BACKEND=minimax
 MINIMAX_API_KEY=...
 # MINIMAX_BASE_URL=https://api.minimaxi.com/v1   # use this from mainland China
+
+# Atlas Cloud (OpenAI-compatible)
+LLM_BACKEND=atlascloud
+ATLASCLOUD_API_KEY=...
+# LLM_MODEL=deepseek-ai/deepseek-v4-pro  # optional
 
 # Zhipu (Anthropic-compatible protocol)
 LLM_BACKEND=zhipu

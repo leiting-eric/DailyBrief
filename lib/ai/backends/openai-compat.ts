@@ -9,7 +9,7 @@ import type { LlmRunOptions, LlmRunResult } from "../llm";
  */
 export interface OpenAICompatConfig {
   /** Stable backend id, used in logs and error messages */
-  backend: "openai" | "deepseek" | "minimax";
+  backend: "openai" | "deepseek" | "minimax" | "atlascloud";
   defaultBaseUrl: string;
   defaultModel: string;
   apiKeyEnv: string;
@@ -39,6 +39,13 @@ export const PRESETS: Record<OpenAICompatConfig["backend"], OpenAICompatConfig> 
     defaultModel: "MiniMax-M2.7",
     apiKeyEnv: "MINIMAX_API_KEY",
     baseUrlEnv: "MINIMAX_BASE_URL",
+  },
+  atlascloud: {
+    backend: "atlascloud",
+    defaultBaseUrl: "https://api.atlascloud.ai/v1",
+    defaultModel: "deepseek-ai/deepseek-v4-pro",
+    apiKeyEnv: "ATLASCLOUD_API_KEY",
+    baseUrlEnv: "ATLASCLOUD_BASE_URL",
   },
 };
 

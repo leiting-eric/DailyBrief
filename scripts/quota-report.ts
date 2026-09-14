@@ -4,7 +4,7 @@ import path from "node:path";
 /**
  * Summarise LLM usage from logs/llm-calls.jsonl, grouped by backend.
  *
- * Every backend (claude-cli / anthropic / openai / deepseek / minimax)
+ * Every backend (claude-cli / anthropic / openai / deepseek / minimax / atlascloud)
  * logs a record per call via lib/ai/log.ts:
  *   { ts, backend, model, durationMs, success, inputChars, outputChars,
  *     errorCategory, errorSnippet }
