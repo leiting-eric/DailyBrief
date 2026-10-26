@@ -28,9 +28,17 @@ export async function fetchRss(
   options: { limit?: number; useCurl?: boolean } = {},
 ): Promise<RawArticle[]> {
   const limit = options.limit ?? 30;
+  const proxyConfigured = Boolean(
+    process.env.HTTPS_PROXY?.trim() ||
+      process.env.https_proxy?.trim() ||
+      process.env.ALL_PROXY?.trim() ||
+      process.env.all_proxy?.trim(),
+  );
 
   let feed;
-  if (options.useCurl) {
+  // rss-parser uses node:https directly and does not honor proxy environment
+  // variables. curl does, so route RSS through curl whenever a proxy is active.
+  if (options.useCurl || proxyConfigured) {
     const xml = await curlFetch(url, CURL_HEADERS);
     feed = await parser.parseString(xml);
   } else {

@@ -1,4 +1,5 @@
 import { jsonrepair } from "jsonrepair";
+import { LlmIncompleteResponseError } from "./errors";
 import { runLlm } from "./llm";
 import { extractJson } from "./json-util";
 import { SYSTEM_PROMPT_DIGEST_EN, SYSTEM_PROMPT_DIGEST_ZH } from "./prompts";
@@ -52,6 +53,12 @@ const PER_CATEGORY_LIMIT: Record<Category, number> = {
 
 const MAX_AGE_DAYS = 14;
 
+const FALLBACK_BRIEF_LIMIT: Record<Category, number> = {
+  tech: 5,
+  finance: 5,
+  politics: 3,
+};
+
 /**
  * Pick `limit` items from `items` so every source gets a fair shot.
  *
@@ -100,6 +107,58 @@ function selectRoundRobin(
     }
   }
   return out;
+}
+
+/**
+ * Keep the report publishable when both digest-generation attempts return
+ * malformed/truncated JSON. The HTML view is driven by the raw article
+ * sidecar, while this fallback preserves useful Markdown/JSON brief items
+ * using summaries that earlier enrichment stages already produced.
+ */
+export function buildFallbackDailyReport(
+  articles: ArticleInput[],
+): DailyReport {
+  const grouped: Record<Category, ArticleInput[]> = {
+    tech: [],
+    finance: [],
+    politics: [],
+  };
+  for (const article of articles) grouped[article.category].push(article);
+
+  const toBriefs = (category: Category): BriefItem[] =>
+    selectRoundRobin(
+      grouped[category],
+      FALLBACK_BRIEF_LIMIT[category],
+    ).map((article) => {
+      const summary =
+        article.summary?.trim() ||
+        article.excerpt?.trim() ||
+        article.title.trim();
+      return {
+        title: article.title,
+        url: article.url,
+        source: article.source,
+        summary: summary.slice(0, 400),
+        importance: 5,
+      };
+    });
+
+  return {
+    hero_headline: "",
+    daily_overview: "",
+    tech_briefs: toBriefs("tech"),
+    finance_briefs: toBriefs("finance"),
+    politics_briefs: toBriefs("politics"),
+    editor_note: "",
+    keywords: [],
+  };
+}
+
+function isRecoverableDigestOutputError(error: unknown): boolean {
+  return (
+    error instanceof SyntaxError ||
+    error instanceof LlmIncompleteResponseError
+  );
 }
 
 async function callOnce(userPayloadJson: string): Promise<DailyReport> {
@@ -195,6 +254,7 @@ async function callOnce(userPayloadJson: string): Promise<DailyReport> {
 
 export async function generateDailyReport(
   articles: ArticleInput[],
+  callDigest: (userPayloadJson: string) => Promise<DailyReport> = callOnce,
 ): Promise<{ report: DailyReport; tokensUsed: number }> {
   const grouped: Record<Category, ArticleInput[]> = {
     tech: [],
@@ -220,16 +280,32 @@ export async function generateDailyReport(
 
   let report: DailyReport;
   try {
-    report = await callOnce(userPayloadJson);
+    report = await callDigest(userPayloadJson);
   } catch (firstErr) {
-    // One retry — claude CLI occasionally wraps in narration on the first
-    // pass but obeys when the same prompt is repeated.
+    // One retry covers transient provider interruptions and occasional
+    // narration/malformed JSON on the first response.
     console.warn(
-      `[pipeline] first claude CLI call failed, retrying: ${
+      `[pipeline] first digest call failed, retrying: ${
         firstErr instanceof Error ? firstErr.message : String(firstErr)
       }`,
     );
-    report = await callOnce(userPayloadJson);
+    try {
+      report = await callDigest(userPayloadJson);
+    } catch (secondErr) {
+      if (
+        isRecoverableDigestOutputError(firstErr) &&
+        isRecoverableDigestOutputError(secondErr)
+      ) {
+        console.warn(
+          "[pipeline] digest output invalid after 2 attempts; using enriched-article fallback",
+        );
+        report = buildFallbackDailyReport(articles);
+      } else {
+        // Auth, quota, networking, and configuration failures remain fatal;
+        // silently publishing through those would hide actionable problems.
+        throw secondErr;
+      }
+    }
   }
 
   // Max subscription has no per-call token meter — we expose 0 for schema
